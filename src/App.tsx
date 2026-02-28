@@ -14,12 +14,12 @@ function App() {
       </header>
 
       <section className="poem-list" aria-label="Listado de poesias">
-        {poems.map((poem) => (
-          <article className="poem-card" key={poem.title}>
-            <h2>{poem.title}</h2>
+        {poems.map((poem, poemIndex) => (
+          <article className={`poem-card ${poem.type === 'quote' ? 'quote-card' : 'poem-card--poem'}`} key={`${poem.type}-${poem.title ?? poemIndex}`}>
+            {poem.type === 'poem' && poem.title && <h2>{poem.title}</h2>}
             <div className="poem-lines">
               {poem.lines.map((line, index) => (
-                <p key={`${poem.title}-${index}`}>{line}</p>
+                <p key={`${poem.type}-${poem.title ?? poemIndex}-${index}`}>{line}</p>
               ))}
             </div>
           </article>

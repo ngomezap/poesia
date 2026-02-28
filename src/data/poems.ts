@@ -1,10 +1,21 @@
+export type PoemType = "poem" | "quote"
+
 export type Poem = {
-  title: string
+  type: PoemType
+  title?: string
   lines: string[]
 }
 
 export const poems: Poem[] = [
   {
+    type: 'quote',
+    lines: [
+      '"La única carrera que me interesa',
+      'es la de tus medias"'
+    ]
+  },
+  {
+    type: 'poem',
     title: 'Ruido de taza',
     lines: [
       'La manana cabe en una taza pequena,',
@@ -14,6 +25,7 @@ export const poems: Poem[] = [
     ]
   },
   {
+    type: 'poem',
     title: 'Ventana de febrero',
     lines: [
       'La luz entra en puntillas,',
@@ -23,6 +35,7 @@ export const poems: Poem[] = [
     ]
   },
   {
+    type: 'poem',
     title: 'Papel doblado',
     lines: [
       'Guardo palabras en el bolsillo,',
