@@ -48,8 +48,7 @@ h1 {
 }
 
 .upload-button {
-  display: block;
-  margin: 0 auto 1.4rem;
+  display: inline-block;
   border: 1px solid #a69b88;
   background: #eee7da;
   color: var(--ink);
@@ -59,6 +58,7 @@ h1 {
   font-size: 0.9rem;
   cursor: pointer;
   transition: background 0.2s ease, transform 0.2s ease;
+  text-decoration: none;
 }
 
 .upload-button:hover {
@@ -72,6 +72,11 @@ h1 {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
   gap: 1rem;
+}
+
+.top-actions {
+  margin: 0 auto 1.4rem;
+  max-width: 56rem;
 }
 
 .poem-card {
@@ -108,48 +113,6 @@ h2 {
   margin-top: 0.3rem;
 }
 
-.modal-overlay {
-  position: fixed;
-  inset: 0;
-  background: rgba(29, 26, 23, 0.45);
-  display: grid;
-  place-items: center;
-  padding: 1rem;
-}
-
-.poem-modal {
-  width: min(100%, 32rem);
-  background: #f9f6ef;
-  border: 1px solid #cfc5b4;
-  border-radius: 8px;
-  padding: 1rem;
-  box-shadow: 0 20px 35px rgba(20, 18, 16, 0.2);
-}
-
-.poem-modal__header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 0.8rem;
-  margin-bottom: 0.8rem;
-}
-
-.poem-modal__header h2 {
-  margin: 0;
-  font-size: 1.05rem;
-}
-
-.modal-close {
-  border: 1px solid #b9af9d;
-  background: #f2ecdf;
-  border-radius: 999px;
-  width: 2rem;
-  height: 2rem;
-  line-height: 1;
-  font-size: 1.2rem;
-  cursor: pointer;
-}
-
 .poem-form {
   display: grid;
   gap: 0.6rem;
@@ -173,7 +136,6 @@ h2 {
 }
 
 .poem-form button {
-  margin-top: 0.4rem;
   border: 1px solid #a69b88;
   background: #eee7da;
   color: var(--ink);
@@ -181,6 +143,33 @@ h2 {
   padding: 0.55rem 0.8rem;
   font: inherit;
   cursor: pointer;
+}
+
+.poem-form button:disabled {
+  cursor: not-allowed;
+  opacity: 0.7;
+}
+
+.admin-panel {
+  margin: 0 auto;
+  max-width: 56rem;
+  background: rgba(255, 255, 255, 0.55);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 1.2rem;
+}
+
+.form-actions {
+  margin-top: 0.4rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 0.8rem;
+}
+
+.secondary-link {
+  color: var(--soft-ink);
+  text-decoration: underline;
 }
 
 .page-footer {
@@ -200,5 +189,11 @@ h2 {
   .upload-button {
     width: 100%;
     max-width: 20rem;
+    text-align: center;
+  }
+
+  .form-actions {
+    flex-direction: column-reverse;
+    align-items: stretch;
   }
 }

@@ -1,5 +1,6 @@
 import './App.css'
 import { useEffect, useState } from 'react'
+import { Link, Navigate, Route, Routes, useNavigate } from 'react-router-dom'
 import { poems as fallbackPoems, type Poem, type PoemType } from './data/poems'
 
 const POEMS_API_URL = '/api/poems'
@@ -60,15 +61,10 @@ function slugify(value: string) {
     .replace(/^-+|-+$/g, '')
 }
 
-function App() {
+function HomePage() {
   const [poems, setPoems] = useState<Poem[]>(fallbackPoems)
   const [isLoading, setIsLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
-  const [isModalOpen, setIsModalOpen] = useState(false)
-  const [title, setTitle] = useState('')
-  const [body, setBody] = useState('')
-  const [submitError, setSubmitError] = useState<string | null>(null)
-  const [isSubmitting, setIsSubmitting] = useState(false)
 
   useEffect(() => {
     const controller = new AbortController()
@@ -105,6 +101,51 @@ function App() {
     return () => controller.abort()
   }, [])
 
+  return (
+    <main className="poetry-page">
+      <header className="hero">
+        <p className="eyebrow">Cuaderno digital</p>
+        <h1>Honorato Rainbows</h1>
+        <p className="intro">
+          Un espacio mínimo para versos breves. Borradores, piezas terminadas y
+          notas que aun respiran.
+        </p>
+      </header>
+
+      <div className="top-actions">
+        <Link className="upload-button" to="/admin">
+          Cargar poema
+        </Link>
+      </div>
+
+      {isLoading && <p className="intro">Cargando poemas desde la API...</p>}
+      {error && !isLoading && <p className="intro">{error}</p>}
+
+      <section className="poem-list" aria-label="Listado de poesias">
+        {poems.map((poem, poemIndex) => (
+          <article className={`poem-card ${poem.type === 'quote' ? 'quote-card' : 'poem-card--poem'}`} key={`${poem.type}-${poem.title ?? poemIndex}`}>
+            {poem.type === 'poem' && poem.title && <h2>{poem.title}</h2>}
+            <div className="poem-lines">
+              {poem.lines.map((line, index) => (
+                <p key={`${poem.type}-${poem.title ?? poemIndex}-${index}`}>{line}</p>
+              ))}
+            </div>
+          </article>
+        ))}
+      </section>
+
+      <footer className="page-footer">Santander, palabras entre la bruma y la montaña.</footer>
+    </main>
+  )
+}
+
+function AdminPage() {
+  const navigate = useNavigate()
+  const [title, setTitle] = useState('')
+  const [body, setBody] = useState('')
+  const [submitError, setSubmitError] = useState<string | null>(null)
+  const [isSubmitting, setIsSubmitting] = useState(false)
+
   async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault()
 
@@ -139,19 +180,9 @@ function App() {
         throw new Error(`La API devolvio ${response.status}`)
       }
 
-      const newPoem: Poem = {
-        type: 'poem',
-        title: cleanTitle,
-        lines: cleanBody
-          .split(/\r?\n/)
-          .map((line) => line.trim())
-          .filter((line) => line.length > 0),
-      }
-
-      setPoems((prev) => [newPoem, ...prev])
       setTitle('')
       setBody('')
-      setIsModalOpen(false)
+      navigate('/')
     } catch {
       setSubmitError('No se pudo guardar el poema en la API.')
     } finally {
@@ -162,92 +193,56 @@ function App() {
   return (
     <main className="poetry-page">
       <header className="hero">
-        <p className="eyebrow">Cuaderno digital</p>
-        <h1>Honorato Rainbows</h1>
-        <p className="intro">
-          Un espacio mínimo para versos breves. Borradores, piezas terminadas y
-          notas que aun respiran.
-        </p>
+        <p className="eyebrow">Panel de gestion</p>
+        <h1>Admin</h1>
+        <p className="intro">Publica un nuevo poema y vuelve al listado principal.</p>
       </header>
 
-      <button
-        className="upload-button"
-        type="button"
-        onClick={() => setIsModalOpen(true)}
-      >
-        Cargar poema
-      </button>
+      <section className="admin-panel">
+        <form className="poem-form" onSubmit={handleSubmit}>
+          <label htmlFor="poem-title">Titulo</label>
+          <input
+            id="poem-title"
+            name="title"
+            type="text"
+            placeholder="Ej: Niebla de enero"
+            value={title}
+            onChange={(event) => setTitle(event.target.value)}
+          />
 
-      {isLoading && <p className="intro">Cargando poemas desde la API...</p>}
-      {error && !isLoading && <p className="intro">{error}</p>}
+          <label htmlFor="poem-body">Poema</label>
+          <textarea
+            id="poem-body"
+            name="body"
+            rows={9}
+            placeholder="Escribe aqui tus versos"
+            value={body}
+            onChange={(event) => setBody(event.target.value)}
+          />
 
-      <section className="poem-list" aria-label="Listado de poesias">
-        {poems.map((poem, poemIndex) => (
-          <article className={`poem-card ${poem.type === 'quote' ? 'quote-card' : 'poem-card--poem'}`} key={`${poem.type}-${poem.title ?? poemIndex}`}>
-            {poem.type === 'poem' && poem.title && <h2>{poem.title}</h2>}
-            <div className="poem-lines">
-              {poem.lines.map((line, index) => (
-                <p key={`${poem.type}-${poem.title ?? poemIndex}-${index}`}>{line}</p>
-              ))}
-            </div>
-          </article>
-        ))}
+          {submitError && <p className="intro">{submitError}</p>}
+
+          <div className="form-actions">
+            <Link className="secondary-link" to="/">
+              Volver al listado
+            </Link>
+            <button type="submit" disabled={isSubmitting}>
+              {isSubmitting ? 'Guardando...' : 'Guardar'}
+            </button>
+          </div>
+        </form>
       </section>
-
-      {isModalOpen && (
-        <div className="modal-overlay" role="presentation" onClick={() => setIsModalOpen(false)}>
-          <section
-            className="poem-modal"
-            role="dialog"
-            aria-modal="true"
-            aria-labelledby="poem-modal-title"
-            onClick={(event) => event.stopPropagation()}
-          >
-            <header className="poem-modal__header">
-              <h2 id="poem-modal-title">Subir poema</h2>
-              <button
-                type="button"
-                className="modal-close"
-                onClick={() => setIsModalOpen(false)}
-                aria-label="Cerrar modal"
-              >
-                ×
-              </button>
-            </header>
-
-            <form className="poem-form" onSubmit={handleSubmit}>
-              <label htmlFor="poem-title">Titulo</label>
-              <input
-                id="poem-title"
-                name="title"
-                type="text"
-                placeholder="Ej: Niebla de enero"
-                value={title}
-                onChange={(event) => setTitle(event.target.value)}
-              />
-
-              <label htmlFor="poem-body">Poema</label>
-              <textarea
-                id="poem-body"
-                name="body"
-                rows={7}
-                placeholder="Escribe aqui tus versos"
-                value={body}
-                onChange={(event) => setBody(event.target.value)}
-              />
-
-              {submitError && <p className="intro">{submitError}</p>}
-
-              <button type="submit" disabled={isSubmitting}>
-                {isSubmitting ? 'Guardando...' : 'Guardar'}
-              </button>
-            </form>
-          </section>
-        </div>
-      )}
-
-      <footer className="page-footer">Santander, palabras entre la bruma y la montaña.</footer>
     </main>
+  )
+}
+
+function App() {
+  return (
+    <Routes>
+      <Route path="/" element={<HomePage />} />
+      <Route path="/admin" element={<AdminPage />} />
+      <Route path="*" element={<Navigate to="/" replace />} />
+    </Routes>
   )
 }
 
