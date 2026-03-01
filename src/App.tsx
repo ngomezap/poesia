@@ -2,7 +2,7 @@ import './App.css'
 import { useEffect, useState } from 'react'
 import { poems as fallbackPoems, type Poem } from './data/poems'
 
-const POEMS_API_URL = 'https://honoratorainbows.igomez-ap.workers.dev/api/poems'
+const POEMS_API_URL = '/api/poems'
 
 type ApiPoem = {
   slug: string
