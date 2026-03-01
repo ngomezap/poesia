@@ -47,6 +47,25 @@ h1 {
   line-height: 1.7;
 }
 
+.upload-button {
+  display: block;
+  margin: 0 auto 1.4rem;
+  border: 1px solid #a69b88;
+  background: #eee7da;
+  color: var(--ink);
+  border-radius: 999px;
+  padding: 0.55rem 1rem;
+  font: inherit;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: background 0.2s ease, transform 0.2s ease;
+}
+
+.upload-button:hover {
+  background: #e4dbc9;
+  transform: translateY(-1px);
+}
+
 .poem-list {
   margin: 0 auto;
   max-width: 56rem;
@@ -89,6 +108,81 @@ h2 {
   margin-top: 0.3rem;
 }
 
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(29, 26, 23, 0.45);
+  display: grid;
+  place-items: center;
+  padding: 1rem;
+}
+
+.poem-modal {
+  width: min(100%, 32rem);
+  background: #f9f6ef;
+  border: 1px solid #cfc5b4;
+  border-radius: 8px;
+  padding: 1rem;
+  box-shadow: 0 20px 35px rgba(20, 18, 16, 0.2);
+}
+
+.poem-modal__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.8rem;
+  margin-bottom: 0.8rem;
+}
+
+.poem-modal__header h2 {
+  margin: 0;
+  font-size: 1.05rem;
+}
+
+.modal-close {
+  border: 1px solid #b9af9d;
+  background: #f2ecdf;
+  border-radius: 999px;
+  width: 2rem;
+  height: 2rem;
+  line-height: 1;
+  font-size: 1.2rem;
+  cursor: pointer;
+}
+
+.poem-form {
+  display: grid;
+  gap: 0.6rem;
+}
+
+.poem-form label {
+  font-size: 0.85rem;
+  color: var(--soft-ink);
+}
+
+.poem-form input,
+.poem-form textarea {
+  width: 100%;
+  border: 1px solid #cabfae;
+  border-radius: 6px;
+  background: #fffdf8;
+  color: var(--ink);
+  font: inherit;
+  padding: 0.55rem 0.65rem;
+  resize: vertical;
+}
+
+.poem-form button {
+  margin-top: 0.4rem;
+  border: 1px solid #a69b88;
+  background: #eee7da;
+  color: var(--ink);
+  border-radius: 6px;
+  padding: 0.55rem 0.8rem;
+  font: inherit;
+  cursor: pointer;
+}
+
 .page-footer {
   max-width: 56rem;
   margin: 2rem auto 0;
@@ -96,4 +190,15 @@ h2 {
   padding-top: 0.8rem;
   font-size: 0.85rem;
   color: var(--soft-ink);
+}
+
+@media (max-width: 640px) {
+  .poetry-page {
+    padding-top: 1.6rem;
+  }
+
+  .upload-button {
+    width: 100%;
+    max-width: 20rem;
+  }
 }
