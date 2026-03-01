@@ -1,6 +1,6 @@
 import './App.css'
 import { useEffect, useState } from 'react'
-import { poems as fallbackPoems, type Poem } from './data/poems'
+import { poems as fallbackPoems, type Poem, type PoemType } from './data/poems'
 
 const POEMS_API_URL = '/api/poems'
 
@@ -8,6 +8,7 @@ type ApiPoem = {
   slug: string
   title: string
   body: string
+  type: PoemType
   created_at: string
 }
 
@@ -29,7 +30,7 @@ function toPoem(apiPoem: ApiPoem): Poem {
     .filter((line) => line.length > 0)
 
   return {
-    type: 'poem',
+    type: apiPoem.type,
     title: apiPoem.title,
     lines: lines.length > 0 ? lines : [apiPoem.body],
   }
