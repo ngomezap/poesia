@@ -113,9 +113,9 @@ function HomePage() {
       </header>
 
       <div className="top-actions">
-        <Link className="upload-button" to="/admin">
+        <a className="upload-button" href="/admin">
           Cargar poema
-        </Link>
+        </a>
       </div>
 
       {isLoading && <p className="intro">Cargando poemas desde la API...</p>}
